@@ -1,13 +1,13 @@
 const db = require('../../data/db-config');
 
 const find = () => {
-    return db('users').select('user_id', 'username', 'phoneNumber');
+    return db('users').select('user_id', 'username', 'password', 'phoneNumber');
 };
 
 const findById = (id) => {
     return db('users')
         .where('user_id', id)
-        .select('user_id', 'username', 'phoneNumber')
+        .select('user_id', 'username', 'password', 'phoneNumber')
         .first();
 };
 
