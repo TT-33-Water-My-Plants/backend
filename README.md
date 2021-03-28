@@ -46,6 +46,8 @@
 
 <br>
 
+### PLANTS TABLE SCHEMA
+
 | plant_id | nickname | species | h2oFrequency | image    | user_id |
 | :------: | :------: | :-----: | :----------: | :------: | :-----: |
 | automatic| required |required |  required    | optional | required|
