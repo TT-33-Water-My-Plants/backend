@@ -5,7 +5,7 @@ const find = () => {
 };
 
 const findById = (id) => {
-    return db('plants').where('plant_id', id).select('nickname', 'species', 'h2oFrequency', 'image');
+    return db('plants').where('plant_id', id).select('nickname', 'species', 'h2oFrequency', 'image').first();
 };
 
 const add = async (plant) => {

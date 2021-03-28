@@ -7,7 +7,6 @@ const router = express.Router();
 router.get('/', (req, res) => {
     User.find()
         .then(users => {
-            console.log(users);
             res.json(users);
         })
 })
