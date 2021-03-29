@@ -14,9 +14,7 @@ const findById = (id) => {
 };
 
 const add = async (user) => {
-    const id = await db('users').insert(user);
-    console.log(id)
-    return findById(id);
+    return await db('users').insert(user, ['user_id', 'username', 'password', 'phoneNumber']);
 };
 
 module.exports = {
