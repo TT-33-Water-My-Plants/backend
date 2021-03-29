@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { HASH_ROUNDS } = require('../secrets');
+const { HASH_ROUNDS } = require('../secrets'); // eslint-disable-line
 
 const Auth = require('./auth-model');
 
@@ -16,7 +16,7 @@ const {
 REGISTER
 =======*/
 
-router.post('/register', validatePayload, validatePhone, validateUsernameUnique, (req, res) => {
+router.post('/register', validatePayload, validatePhone, validateUsernameUnique, (req, res, next) => {
     const { password } = req.body;
 
     const hash = bcrypt.hashSync(password, 7);
@@ -27,9 +27,10 @@ router.post('/register', validatePayload, validatePhone, validateUsernameUnique,
         .then(registered => {
             res.status(201).json(registered);
         })
+        .catch(next);
 })
 
-router.post('/login', validatePayload, validateUserExists, (req, res) => {
+router.post('/login', validatePayload, validateUserExists, (req, res, next) => {
     const { username, password } = req.body;
 
     Auth.findBy({ username: username })
@@ -45,6 +46,17 @@ router.post('/login', validatePayload, validateUserExists, (req, res) => {
                 })
             }
         })
+        .catch(next)
+})
+
+router.use((err, req, res, next) => {
+    res.status(500).json({
+        message: err.message,
+        stack: err.stack,
+        custom: 'Server error: something went wrong.'
+    })
+
+    next();
 })
 
 module.exports = router;

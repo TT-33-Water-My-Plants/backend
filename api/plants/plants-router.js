@@ -2,39 +2,54 @@ const router = require('express').Router();
 
 const Plant = require('./plants-model');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     Plant.find()
         .then(plants => {
             res.json(plants);
         })
+        .catch(next)
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
     Plant.findById(req.params.id)
         .then(plant => {
             res.json(plant);
         })
+        .catch(next)
 });
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     Plant.add(req.body)
         .then(newPlant => {
             res.status(201).json(newPlant)
         })
+        .catch(next)
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
     Plant.update(req.params.id, req.body)
         .then(updated => {
             res.json(updated);
         })
+        .catch(next)
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
     Plant.remove(req.params.id)
         .then(deleted => {
             res.json(deleted);
         })
+        .catch(next)
+})
+
+router.use((err, req, res, next) => {
+    res.status(500).json({
+        message: err.message,
+        stack: err.stack,
+        custom: 'Server error: something went wrong.'
+    })
+
+    next();
 })
 
 module.exports = router;
