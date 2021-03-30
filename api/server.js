@@ -11,7 +11,7 @@ const cors = require('cors')
 const server = express()
 server.use(express.json())
 server.use(helmet())
-server.use(cors());
+server.use(cors({ origin: 'http://localhost:3000' }));
 
 server.use('/auth', authRouter);
 server.use('/api/users', usersRouter);
