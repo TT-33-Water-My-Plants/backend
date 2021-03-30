@@ -1,7 +1,7 @@
 const db = require('../../data/db-config');
 
 const find = () => {
-    return db('plants').select('nickname', 'species', 'h2oFrequency', 'image');
+    return db('plants').select('plant_id', 'nickname', 'species', 'h2oFrequency', 'image');
 };
 
 const findById = (id) => {
