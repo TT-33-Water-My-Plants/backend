@@ -4,11 +4,11 @@ const express = require('express');
 
 const router = express.Router();
 
-router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// router.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 router.get('/', (req, res, next) => {
     User.find()
@@ -50,14 +50,12 @@ router.delete('/:id', (req, res, next) => {
         .catch(next)
 })
 
-router.use((err, req, res, next) => {
+router.use((err, req, res, next) => { //eslint-disable-line
     res.status(500).json({
         message: err.message,
         stack: err.stack,
         custom: 'Server error: something went wrong.'
     })
-
-    next();
 })
 
 module.exports = router;

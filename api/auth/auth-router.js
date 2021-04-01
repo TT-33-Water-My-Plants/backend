@@ -49,14 +49,12 @@ router.post('/login', validatePayload, validateUserExists, (req, res, next) => {
         .catch(next)
 })
 
-router.use((err, req, res, next) => {
+router.use((err, req, res, next) => { //eslint-disable-line
     res.status(500).json({
         message: err.message,
         stack: err.stack,
         custom: 'Server error: something went wrong.'
     })
-
-    next();
 })
 
 module.exports = router;

@@ -2,11 +2,11 @@ const router = require('express').Router();
 
 const Plant = require('./plants-model');
 
-router.use(function(req, res, next) {
-    res.header("X-Access-Control-Allow-Origin", "*");
-    res.header("X-Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// router.use(function(req, res, next) {
+//     res.header("X-Access-Control-Allow-Origin", "*");
+//     res.header("X-Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 router.get('/', (req, res, next) => {
     Plant.find()
@@ -48,14 +48,12 @@ router.delete('/:id', (req, res, next) => {
         .catch(next)
 })
 
-router.use((err, req, res, next) => {
+router.use((err, req, res, next) => { //eslint-disable-line
     res.status(500).json({
         message: err.message,
         stack: err.stack,
         custom: 'Server error: something went wrong.'
     })
-
-    next();
 })
 
 module.exports = router;
