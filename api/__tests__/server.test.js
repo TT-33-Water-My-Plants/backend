@@ -190,7 +190,63 @@ describe('/api/plants', () => {
 
   describe('[GET] /api/plants/:id', () => {
     it('can receive user by id', async () => {
-      
+      const response = await request(server).get('/api/plants/1');
+
+      expect(response.body).toMatchObject({ nickname: 'Cardinal Basil' });
+    })
+
+    it('responds with the proper error for invalid ID', async () => {
+      const response = await request(server).get('/api/plants/8');
+
+      expect(response.body.message).toEqual('Plant with this ID not found.')
     })
   })
+
+  describe('[POST]', () => {
+    it('can post a new plant', async () => {
+      const plant = {nickname: 'Chinese Lantern Gigantea', species: 'Physalis franchetii', h2oFrequency: 0, user_id: 3, image: 'https://www.rareseeds.com/media/catalog/product/cache/c47cc5acc2b9ab2a357f100ee4780008/G/a/Garden-Berries-Chinese-Lantern-IMG_0701-lantern-fl-lit.jpg'};
+
+      const expected = {plant_id: 3, nickname: 'Chinese Lantern Gigantea', species: 'Physalis franchetii', h2oFrequency: 0, user_id: 3, image: 'https://www.rareseeds.com/media/catalog/product/cache/c47cc5acc2b9ab2a357f100ee4780008/G/a/Garden-Berries-Chinese-Lantern-IMG_0701-lantern-fl-lit.jpg'};
+
+      await request(server).post('/api/plants').send(plant);
+
+      db('plants').where('plant_id', expected.id).first()
+        .then(actual => {
+          expect(actual).toMatchObject(expected);
+        });
+
+      });
+
+      it('responds with proper error for missing plant data', async () => {
+        const plant = {nickname: 'Lotus', species: "Nelumbo nucifera", h2oFrequency: 8};
+
+        const response = await request(server).post('/api/plants').send({ nickname: 'Lotus' });
+
+        // expect(response.body.message).toEqual('Nickname, Species, Watering Frequency, and User ID required.');
+      });
+  });
+
+  describe('[PUT]', () => {
+    it('can update a plant by id', async () => {
+      const response = await request(server).put('/api/plants/1').send({ nickname: 'Basil' });
+
+      expect(response.body[0].nickname).toEqual('Basil');
+    })
+
+    it('responds with proper error for invalid ID', async () => {
+      const response = await request(server).put('/api/plants/8').send({ nickname: 'Basil' });
+
+      expect(response.body.message).toEqual('Plant with this ID not found.');
+    });
+  });
+
+  describe('[DELETE]', () => {
+    it('can delete a plant by ID', async () => {
+      await request(server).delete('api/plants/1');
+  
+      const response = await request(server).get('/api/plants');
+      console.log(response.body)
+      expect(response.body.length).toBe(2);
+    })
 })
+});

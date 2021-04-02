@@ -1,5 +1,5 @@
 const router = require('express').Router();
-
+const { checkId, checkPayload } = require('./plants-middleware');
 const Plant = require('./plants-model');
 
 // router.use(function(req, res, next) {
@@ -16,7 +16,7 @@ router.get('/', (req, res, next) => {
         .catch(next)
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', checkId, (req, res, next) => {
     Plant.findById(req.params.id)
         .then(plant => {
             res.json(plant);
@@ -24,7 +24,7 @@ router.get('/:id', (req, res, next) => {
         .catch(next)
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkPayload, (req, res, next) => {
     Plant.add(req.body)
         .then(newPlant => {
             res.status(201).json(newPlant)
@@ -32,7 +32,7 @@ router.post('/', (req, res, next) => {
         .catch(next)
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/:id', checkId, (req, res, next) => {
     Plant.update(req.params.id, req.body)
         .then(updated => {
             res.json(updated);
